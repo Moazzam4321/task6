@@ -17,6 +17,7 @@ use App\Exceptions\UserNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
+use function Termwind\render;
 
 class UserController extends Controller
 {
@@ -53,11 +54,10 @@ class UserController extends Controller
                     return redirect("login.post")->withSuccess('Oppes! You have entered invalid credentials');
                 }
         }
-       catch(UserNotFoundException $exception){
+       catch(\App\Exceptions\UserNotFoundException $exception){
         report($exception);
+        render($exception);
         return response()->exception();
-        }catch(NotFoundHttpException $exception){
-            return response()->exception();
         }
     }
          // SignUp Method
@@ -96,8 +96,9 @@ class UserController extends Controller
             "message"=>"You are registered successfully. Now go to ur gmail for account verification"
             ]);
         }
-        catch(NotFoundHttpException $exception){
+        catch(\App\Exceptions\UserNotFoundException $exception){
             report($exception);
+            render($exception);
             return response()->exception();
         }
     }
@@ -114,12 +115,11 @@ class UserController extends Controller
            return redirect()->route("login");
             }
         }
-       catch(UserNotFoundException $exception){
+       catch(\App\Exceptions\UserNotFoundException $exception){
         report($exception);
+        render($exception);
         return response()->exception();
-         }catch(NotFoundHttpException $exception){
-            return response()->exception();
-        }
+         }
     }
       // Email Verfifed Method
     public function emailVerify($token)
@@ -173,8 +173,9 @@ class UserController extends Controller
                 });
             }
         }
-        catch(NotFoundHttpException $exception){
+        catch(\App\Exceptions\UserNotFoundException $exception){
             report($exception);
+            render($exception);
             return response()->exception();
         }
     }
@@ -197,8 +198,9 @@ class UserController extends Controller
         {
             report($exception);
             return response()->exception();
-        }catch(NotFoundHttpException $exception){
+        }catch(\App\Exceptions\UserNotFoundException $exception){
             report($exception);
+            render($exception);
             return response()->exception();
         }catch(RouteNotFoundException $exception){
             report($exception);
