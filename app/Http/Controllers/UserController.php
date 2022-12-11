@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Exceptions\UserNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Illuminate\Database\QueryException;
 
 
 class UserController extends Controller
@@ -56,9 +55,9 @@ class UserController extends Controller
         }
        catch(UserNotFoundException $exception){
         report($exception);
-        return "Some error message";
+        return response()->exception();
         }catch(NotFoundHttpException $exception){
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }
     }
          // SignUp Method
@@ -77,6 +76,11 @@ class UserController extends Controller
           'address'=>$data['address'],
            'image'=>$data['image'],
             ]);
+            if ($data->hasFile('image')) 
+            {
+                //  $path = Storage::disk('local')->put($request->file('photo')->getClientOriginalName(),$request->file('photo')->get());
+              $path = $data->file('image')->store('/images');
+             }
             $token = Str::random(10);
             $link="http://localhost:8000/api/account/verify/$token";
   
@@ -94,7 +98,7 @@ class UserController extends Controller
         }
         catch(NotFoundHttpException $exception){
             report($exception);
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }
     }
       // Dashboard method
@@ -112,9 +116,9 @@ class UserController extends Controller
         }
        catch(UserNotFoundException $exception){
         report($exception);
-        return "OOPs,Something wenr wrong";
+        return response()->exception();
          }catch(NotFoundHttpException $exception){
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }
     }
       // Email Verfifed Method
@@ -146,7 +150,7 @@ class UserController extends Controller
         }
         catch(\Exception $exception){
             report($exception);
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }}
         // Forgot Password Method
     public function forgetPassword(ForgotRequest $request)
@@ -171,7 +175,7 @@ class UserController extends Controller
         }
         catch(NotFoundHttpException $exception){
             report($exception);
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }
     }
        // Password Reset Method
@@ -192,13 +196,13 @@ class UserController extends Controller
         catch(UserNotFoundException $exception)
         {
             report($exception);
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }catch(NotFoundHttpException $exception){
             report($exception);
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }catch(RouteNotFoundException $exception){
             report($exception);
-            return "OOPs,Something wenr wrong";
+            return response()->exception();
         }
     }
 }
