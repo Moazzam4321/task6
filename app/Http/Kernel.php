@@ -15,6 +15,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        //'is_verified' => \App\Http\Middleware\VerifiedEmail::class,
+        'is_verify' => \App\Http\Middleware\IsVerify::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -41,6 +43,7 @@ class Kernel extends HttpKernel
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
+            'is_verified' => \App\Http\Middleware\VerifiedEmail::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
