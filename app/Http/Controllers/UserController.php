@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Exceptions\UserNotFoundException;
+use App\Jobs\EmailSending;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 use function Termwind\render;
@@ -54,8 +55,8 @@ class UserController extends Controller
                 }
         }
        catch(\App\Exceptions\UserNotFoundException $exception){
-        report($exception);
-        render($exception);
+       // report($exception);
+       // render($exception);
         return response()->exception();
         }
     }
@@ -64,7 +65,7 @@ class UserController extends Controller
     {  
         try
         {
-            $data=$request->validated();
+            $data=$request-> validated();
             $password=Hash::make($data['password'], [
             'rounds' => 12,
              ]);
@@ -87,10 +88,7 @@ class UserController extends Controller
               'user_id' => $createUser->id, 
               'token' => $token
             ]);
-           Mail::send('emailVerification', ['link' => $link], function($message) use($request){
-              $message->to($request->email);
-              $message->subject('Email Verification Mail');
-            });
+              EmailSending::dispatch($link,$request);
            return response()->json([
             "message"=>"You are registered successfully. Now go to ur gmail for account verification"
             ]);
@@ -166,10 +164,7 @@ class UserController extends Controller
                    'user_id' => $User['id'], 
                      'token' => $token
                   ]);
-                Mail::send('resetPassword', ['link' => $link], function($message) use($data){
-                $message->to($data['email']);
-                 $message->subject('Reset Password link');
-                });
+                  EmailSending::dispatch($link,$data);
             }
         }
         catch(\App\Exceptions\UserNotFoundException $exception){

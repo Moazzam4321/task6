@@ -24,9 +24,10 @@ class UserNotFoundException extends Exception
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function render($request, $exception)
+    public function render($request)
     {
+        return "error";    
 
-        return response()->exception();
+       // return response()->exception();
     }
 }

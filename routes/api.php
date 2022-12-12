@@ -17,6 +17,9 @@ use App\Http\Middleware\VerifiedEmail;
   
 // /* New Added Routes */
       //---------- Login Route -------------
+Route::get("/",function(){
+   return "running now";
+}) ;     
 Route::post('/login', [UserController::class, 'postLogin'])->middleware(VerifiedEmail::class)->name('login.post'); 
       //----------- SignUp Route---------
 Route::post('/registration', [UserController::class, 'signUp'])->name('register.post'); 
