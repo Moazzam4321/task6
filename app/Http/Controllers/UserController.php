@@ -55,9 +55,8 @@ class UserController extends Controller
                 }
         }
        catch(\App\Exceptions\UserNotFoundException $exception){
-       // report($exception);
-       // render($exception);
-        return response()->exception();
+        report($exception);
+        return false;
         }
     }
          // SignUp Method
@@ -95,8 +94,7 @@ class UserController extends Controller
         }
         catch(\App\Exceptions\UserNotFoundException $exception){
             report($exception);
-            render($exception);
-            return response()->exception();
+            return false;
         }
     }
       // Dashboard method
@@ -114,8 +112,7 @@ class UserController extends Controller
         }
        catch(\App\Exceptions\UserNotFoundException $exception){
         report($exception);
-        render($exception);
-        return response()->exception();
+        return false;
          }
     }
       // Email Verfifed Method
@@ -147,7 +144,7 @@ class UserController extends Controller
         }
         catch(\Exception $exception){
             report($exception);
-            return response()->exception();
+            return false;
         }}
         // Forgot Password Method
     public function forgetPassword(ForgotRequest $request)
@@ -169,8 +166,7 @@ class UserController extends Controller
         }
         catch(\App\Exceptions\UserNotFoundException $exception){
             report($exception);
-            render($exception);
-            return response()->exception();
+            return false;
         }
     }
        // Password Reset Method
@@ -191,14 +187,7 @@ class UserController extends Controller
         catch(UserNotFoundException $exception)
         {
             report($exception);
-            return response()->exception();
-        }catch(\App\Exceptions\UserNotFoundException $exception){
-            report($exception);
-            render($exception);
-            return response()->exception();
-        }catch(RouteNotFoundException $exception){
-            report($exception);
-            return response()->exception();
+            return false;
         }
     }
 }
